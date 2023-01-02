@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -24,9 +23,6 @@ SECRET_KEY = "django-insecure-y%k72ow3i&0xq@3x3k1fms3^@whnor+psc8smv@9vndzmr702@
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -37,9 +33,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "auth.apps.AuthConfig",
+    "app.apps.AppConfig",
     "crispy_forms",
-    "crispy_bootstrap5"
+    "crispy_bootstrap5",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -75,6 +71,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "web.wsgi.application"
+
+ASGI_APPLICATION = "web.asgi.application"
+
+MOUNT_DJANGO_APP = True
 
 
 # Database
@@ -122,7 +122,20 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+)
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+PROJECT_NAME = "api"
+
+# Redirections
+
+LOGOUT_REDIRECT_URL = '/app/login'
+
+LOGIN_REDIRECT_URL = '/app/home'
