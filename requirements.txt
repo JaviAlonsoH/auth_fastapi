@@ -1,0 +1,10 @@
+Django>=3.2.3,<3.3
+fastapi == 0.70.1
+uvicorn == 0.16.0
+requests
+pydantic[email]
+motor == 2.5.1
+jinja2 
+djangorestframework == 3.14.0
+crispy-bootstrap5
+asyncio
