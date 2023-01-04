@@ -1,7 +1,9 @@
 import os
+
 from importlib.util import find_spec
 from django.apps import apps
 from django.core.wsgi import get_wsgi_application
+from web import settings
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "web.settings")
 
@@ -11,13 +13,18 @@ application = get_wsgi_application()
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware import Middleware
+from starlette.middleware.authentication import AuthenticationMiddleware
 
 from fastapi.middleware.wsgi import WSGIMiddleware
+from app.middlewares.auth import BasicAuthBackend
+
+apps.populate(settings.INSTALLED_APPS)
 
 
-from app.routers.properties_routes import router
+from app.routers.properties_router import router
 
-app = FastAPI()
+app = FastAPI(middleware=[Middleware(AuthenticationMiddleware, backend=BasicAuthBackend())])
 
 app.mount('/static',
           StaticFiles(

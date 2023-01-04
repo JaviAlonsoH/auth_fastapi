@@ -5,6 +5,7 @@ class AppConfig(AppConfig):
     name = "app"
 
     def ready(self):
-        import app.signals.handlers
-        from .permissions import create_groups
-        from django.contrib.auth.models import Group
+        from app.routers.properties_router import router
+        from web.urls import api_router
+
+        api_router.include_router(router, tags=[self.name])
