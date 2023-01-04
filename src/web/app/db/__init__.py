@@ -1,8 +1,8 @@
 import os
-import motor.motor_asyncio
+from pymongo import MongoClient
 
-client = motor.motor_asyncio.AsyncIOMotorClient(
-    "mongodb://localhost:27017")
+client = MongoClient(
+    "mongodb+srv://user1:1234@cluster0.sxfpn0k.mongodb.net/?retryWrites=true&w=majority")
 
 db = client.auth_fastapi_db
 

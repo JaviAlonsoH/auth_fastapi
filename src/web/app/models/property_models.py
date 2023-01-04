@@ -23,9 +23,6 @@ class Post(models.Model):
     listing_type = models.IntegerField()
     date = models.DateTimeField()
 
-    def __str__(self):
-        return self.title + "\n" + self.description
-
 
 class PropertyModel(BaseModel):
     build_status: conint(strict=True) = Field(...)

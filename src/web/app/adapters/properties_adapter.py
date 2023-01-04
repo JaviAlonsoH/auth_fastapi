@@ -9,8 +9,8 @@ from app.models.property_models import PropertyModel, UpdatePropertyModel, Respo
 
 
 async def get_properties_data():
-    properties = []
-    async for item in properties_col.find():
+    properties: [PropertyModel] = []
+    for item in properties_col.find():
         properties.append(property_helper(item))
     return properties
 

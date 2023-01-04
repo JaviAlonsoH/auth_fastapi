@@ -1,42 +1,36 @@
-from django.shortcuts import render, redirect
+import os
+import requests
+
 from .forms import RegisterForm, PostForm
+from .models.property_models import Post
+
+from pathlib import Path
+from web import settings
+
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import login, logout, authenticate
-from .models.property_models import Post
+
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import permission_classes
+
+from fastapi.templating import Jinja2Templates
 # Create your views here.
 
+templates = Jinja2Templates(
+    directory="C:/Users/Usuario/Documents/Git Repositories/auth_fastapi/src/web/app/templates")
 
-@login_required(login_url="/login")
+
+@login_required(login_url="/app/login")
 def home(request):
     posts = Post.objects.all()
 
-    if request.method == "POST":
-        post_id = request.POST.get("post-id")
-        user_id = request.POST.get("user-id")
-
-        if post_id:
-            post = Post.objects.filter(id=post_id).first()
-            if post and (post.author == request.user or request.user.has_perm("app.delete_property")):
-                post.delete()
-        elif user_id:
-            user = User.objects.filter(id=user_id).first()
-            if user and request.user.is_staff:
-                try:
-                    group = Group.objects.get(name='default')
-                    group.user_set.remove(user)
-                except:
-                    pass
-
-                try:
-                    group = Group.objects.get(name='mod')
-                    group.user_set.remove(user)
-                except:
-                    pass
-    return render(request, 'app/home.html')
+    if request.user.is_authenticated:
+        return render(request, 'app/home.html', {"posts": posts})
 
 
-@login_required(login_url="/login")
+@login_required(login_url="/app/login")
 # @permission_required("app.add_property", login_url="/login", raise_exception=True)
 def create_property(request):
     if request.method == "POST":
@@ -44,7 +38,7 @@ def create_property(request):
         if form.is_valid():
             post = form.save
             post.author = request.user
-            return redirect('/home')
+            return redirect('app/home')
     else:
         form = PostForm()
 
